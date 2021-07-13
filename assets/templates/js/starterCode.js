@@ -1,10 +1,7 @@
-
 // Access flask app for election2020 data (from Mongo)
 d3.json("http://127.0.0.1:5000/").then(function(data) {
 
   var percentData = Object.values(data);
-
-  console.log(data);
 
   // Pull topojson data to build map (https://bl.ocks.org/mbostock/4090848)
   d3.json("https://unpkg.com/us-atlas@1/us/10m.json").then(function(us) {
@@ -13,46 +10,105 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
     const width = 975;
     const height = 610;
 
+    const zoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .on("zoom", zoomed);
+
     // Append svg and define attributes
     var  usMap = d3.select("#USmap")
       .append("svg")
       .attr("width", width)
       .attr("height", height)
       .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round");
+      .attr("stroke-linecap", "round")
+      .attr("viewBox", [0, 0, width, height])
+      .on("click", reset);
 
-  // Define path to use later
-  var path = d3.geoPath();
+    // Allow users to reset map if they click outside of the svg
+    var body = d3.select("body")
+      .on("click", reset);
 
-  // Select into svg and append the graph
-  var svg = d3.select("svg");
-  var g = svg.append("g")
-  
-  var color = d3.scaleLinear()
-    .range(["red", "blue"])
-    .domain([0,1]);
+    // Define path to use later
+    var path = d3.geoPath();
 
-  color.domain(d3.extent(_.toArray(percentData)));
+    // Select into svg and append the graph
+    var svg = d3.select("svg");
+    var g = svg.append("g")
+    
+    // Define color
+    var color = d3.scaleLinear()
+      .range(["red", "blue"])
+      .domain([0,1]); 
 
-  // Add the map 
-  const states = g.append("g")
-      .attr("cursor", "pointer")
-      .style("fill", "green")
-    .selectAll("path")
-    .data(topojson.feature(us, us.objects.states).features)
-    .enter().append("path") 
-      // .on("click", clicked)
-      .attr("d", path)
-      .style("fill", function(d,i) {
-        var index = d.id;
-        var value = data[index];
-        return (value)? color(value) : "#AAA"; 
-      });
+    color.domain(d3.extent(_.toArray(percentData)));
+    
+    // Add the map 
+    const states = g.append("g")
+        .attr("cursor", "pointer")
+        .attr("fill", "#444")
+        .classed("map",true)
+      .selectAll("path")
+      .data(topojson.feature(us, us.objects.states).features)
+      .enter().append("path") 
+        .on("click", clicked)
+        .attr("d", path)
+        .style("fill", function(d,i) {
+          var index = d.id;
+          var value = data[index];
+          return (value)? color(value) : "#AAA"; 
+        });
 
-  g.append("path")
-    .attr("fill", "none")
-    .attr("stroke", "white")
-    .attr("stroke-linejoin", "round")
-    .attr("d", path(topojson.mesh(us, us.objects.states, (a, b) => a !== b)))
+    g.append("path")
+      .attr("fill", "none")
+      .attr("stroke", "white")
+      .attr("stroke-linejoin", "round")
+      .attr("d", path(topojson.mesh(us, us.objects.states, (a, b) => a !== b)))
+
+
+  // Functions 
+  function clicked(event, d) {
+    const [[x0, y0], [x1, y1]] = path.bounds(d);
+
+    event.stopPropagation();
+
+    states.transition().style("fill", null);
+
+    d3.select(".map")
+      .selectAll("path")
+      .attr("fill", "#444");
+
+    d3.select(this).transition().style("fill", "black");
+
+    svg.transition().duration(750).call(
+      zoom.transform,
+      d3.zoomIdentity
+        .translate(width / 2, height / 2)
+        .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+      d3.pointer(event, svg.node())
+    );
+  }
+
+  function zoomed(event) {
+    const {transform} = event;
+    g.attr("transform", transform);
+    g.attr("stroke-width", 1 / transform.k);
+  }
+
+  function reset() {
+    states.transition().style("fill", function(d,i) {
+      var index = d.id;
+      var value = data[index];
+      return (value)? color(value) : "#AAA";
+    }); 
+  // .style("fill", "green");
+    svg.transition().duration(750).call(
+      zoom.transform,
+      d3.zoomIdentity,
+      d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
+    );       
+  }
   });
 });
+
+
