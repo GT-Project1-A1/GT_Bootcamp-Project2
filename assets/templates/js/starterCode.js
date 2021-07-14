@@ -6,6 +6,12 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
   // Pull topojson data to build map (https://bl.ocks.org/mbostock/4090848)
   d3.json("https://unpkg.com/us-atlas@1/us/10m.json").then(function(us) {
 
+    // Define county and state data sets
+    var countyData = us.objects.counties;
+    var someData = topojson.feature(us, countyData).features
+    console.log(someData)
+    var stateData = us.objects.states;
+
     // Define width and and height of svg
     const width = 975;
     const height = 610;
@@ -46,23 +52,24 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
     const states = g.append("g")
         .attr("cursor", "pointer")
         .attr("fill", "#444")
-        .classed("map",true)
-      .selectAll("path")
-      .data(topojson.feature(us, us.objects.states).features)
-      .enter().append("path") 
-        .on("click", clicked)
-        .attr("d", path)
-        .style("fill", function(d,i) {
-          var index = d.id;
-          var value = data[index];
-          return (value)? color(value) : "#AAA"; 
+        .classed("map", true)
+        .selectAll("path")
+          .data(topojson.feature(us, stateData).features)
+          .enter().append("path") 
+            .on("click", clicked)
+            .attr("d", path)
+            .style("fill", function(d) {
+              var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
+              var value = data[index];
+              return (value)? color(value) : "#AAA"; 
         });
-
+      
+    // Add white lines between states
     g.append("path")
       .attr("fill", "none")
       .attr("stroke", "white")
       .attr("stroke-linejoin", "round")
-      .attr("d", path(topojson.mesh(us, us.objects.states, (a, b) => a !== b)))
+      .attr("d", path(topojson.mesh(us, stateData, (a, b) => a !== b)));
 
 
   // Functions 
@@ -71,14 +78,32 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
 
     event.stopPropagation();
 
-    states.transition().style("fill", null);
+    states.transition()
+    .style("fill", null)
+    .selectAll("path")
 
-    d3.select(".map")
-      .selectAll("path")
-      .attr("fill", "#444");
+    g.append("g").selectAll("path")
+      .data(topojson.feature(us, countyData).features)
+      .enter().append("path") 
+        .attr("d", path)
+        .style("fill", function(d) {
+          var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
+          console.log(index);
+          var value = data[index];
+          return (value)? color(value) : "green"; 
+    });
 
-    d3.select(this).transition().style("fill", "black");
 
+    g.append("path")
+    .attr("fill", "none")
+    .attr("stroke", "white")
+    .attr("stroke-linejoin", "round")
+    .attr("d", path(topojson.mesh(us, stateData, (a, b) => a !== b)));
+
+    d3.select(this)
+      .transition()
+      .style("fill", "black")
+    
     svg.transition().duration(750).call(
       zoom.transform,
       d3.zoomIdentity
@@ -96,12 +121,12 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
   }
 
   function reset() {
-    states.transition().style("fill", function(d,i) {
+    states.style("fill", function(d,i) {
       var index = d.id;
       var value = data[index];
       return (value)? color(value) : "#AAA";
     }); 
-  // .style("fill", "green");
+    
     svg.transition().duration(750).call(
       zoom.transform,
       d3.zoomIdentity,
