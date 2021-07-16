@@ -86,6 +86,7 @@ def index():
                  "West Virginia": "54",
                  "Wisconsin": "55",
                  "Wyoming": "56"}
+
     all_data = getData()
 
     return_list = []
@@ -115,33 +116,35 @@ def index():
     # Calculate Democrat win percentage
     i = 0         # 0 means Trump, 1 means Biden
     count = 0
-    percentDem = {}
+    finalJson = {}
+    percentDem = []
+    x = 1
 
     for index, row in condensed_df.iterrows():
         if i == 0:
-            # Trump's vote count
             count = count + row["total_votes"]
             i = i + 1
         else:
-            # Calculate count for state
             count = count + row["total_votes"]
-
-            # Calculate percent
             percent = row["total_votes"] / count
-
-            # Store current state
             state = row.name[0]
-
-            # Get topojson id based on current state
             state_id = state_ids.get(state)
 
-            # Add ID and percent democrat to dictionary
-            percentDem.update({state_id: percent})
+            state_info = {state_id: percent}
+
+            percentDem.append(state_info)
 
             i = 0
             count = 0
+            x = x + 1
 
-    return percentDem
+    countyIds_data = return_list[2]
+    countyIds_json = json.loads(countyIds_data)
+
+    finalJson.update({"percentDem": percentDem})
+    finalJson.update({"countyIDs": countyIds_json})
+
+    return finalJson
 
 
 @app.route("/getAllRecords/<tableNumber>")
