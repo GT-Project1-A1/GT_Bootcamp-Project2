@@ -1,0 +1,7 @@
+table.gridjs-table,
+.gridjs-footer {
+  opacity: 60%;
+  color: black;
+  max-width: 60vw;
+  margin: auto;
+}

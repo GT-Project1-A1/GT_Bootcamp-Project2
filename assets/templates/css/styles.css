@@ -3,7 +3,11 @@ body {
   height: 100%;
 }
 body {
-  background-image: linear-gradient(to bottom right, red, blue);
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(248, 130, 130),
+    rgb(77, 77, 241)
+  );
 }
 
 a {
@@ -32,4 +36,10 @@ a {
 
 .dropdown-menu > li > a:any-link {
   background-color: transparent;
+}
+
+/* svg */
+svg {
+  display: block;
+  margin: auto;
 }
