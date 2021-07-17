@@ -107,7 +107,8 @@ def index():
     i = 0         # 0 means Trump, 1 means Biden 
     count = 0
     finalJson = {}
-    percentDem= []
+    percentDem = {}
+    counties = {}
     x = 1 
        
     for index, row in condensed_df.iterrows():
@@ -122,7 +123,7 @@ def index():
             
             state_info = {state_id : percent}
 
-            percentDem.append(state_info)
+            percentDem.update(state_info)
 
             i = 0
             count = 0
@@ -130,9 +131,19 @@ def index():
     
     countyIds_data = return_list[3]
     countyIds_json = json.loads(countyIds_data)
+
+    for element in countyIds_json:
+        ids = element.get("id")
+        names = element.get("name")
+        
+        counties.update({ids:names})
+
+
+
+
     
     finalJson.update({"percentDem": percentDem})
-    finalJson.update({"countyIDs": countyIds_json})
+    finalJson.update({"countyIDs": counties})
     
     return finalJson
 

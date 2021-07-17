@@ -2,15 +2,13 @@
 d3.json("http://127.0.0.1:5000/").then(function(data) {
 
   var counties;
-  var percentData = Object.values(data);
+  var percentData = Object.values(data.percentDem);
 
   // Pull topojson data to build map (https://bl.ocks.org/mbostock/4090848)
   d3.json("https://unpkg.com/us-atlas@1/us/10m.json").then(function(us) {
 
     // Define county and state data sets
     var countyData = us.objects.counties;
-    var someData = topojson.feature(us, countyData).features
-    console.log(someData)
     var stateData = us.objects.states;
 
     // Define width and and height of svg
@@ -44,17 +42,13 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
     
     // Define color
     var color = d3.scaleLinear()
-      .range(["red", "blue"])
-      .domain([0,1]); 
-
-    color.domain(d3.extent(_.toArray(percentData)));
+    .domain([0, .5, 1])
+    .range(["red", "purple", "blue"])
 
     var states;
     addMap()
 
       
-
-
   // FUNCTION
 
   function addMap() {
@@ -70,9 +64,10 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
             .attr("d", path)
             .style("fill", function(d) {
               var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
-              var value = data[index];
-              return (value)? color(value) : "#AAA"; 
-        });
+              var value = data.percentDem[index];
+              console.log(value);
+              return (value)? color(value): "#444"; 
+            });
 
     // Add white lines between states
     g.append("path")
@@ -80,7 +75,7 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
     .attr("stroke", "white")
     .attr("stroke-linejoin", "round")
     .attr("d", path(topojson.mesh(us, stateData, (a, b) => a !== b)))
-    .classed("counties", true);
+    .classed("states", true);
   }
   
   
@@ -101,8 +96,7 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
         .attr("stroke", "black")
         .style("fill", function(d) {
           var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
-          console.log(index);
-          var value = data[index];
+          var value = data.countyIDs;
           return (value)? color(value) : "green"; 
     });
 
