@@ -23,8 +23,9 @@ def getData():
     candidate = mongo.db.pCandidate.find()
     state = mongo.db.pState.find()
     county = mongo.db.pCounty.find()
+    county_IDs = mongo.db.countyIds.find()
 
-    all_data = [candidate, state, county]
+    all_data = [candidate, state, county, county_IDs ]
 
     return all_data
 
@@ -117,16 +118,10 @@ def index():
     i = 0         # 0 means Trump, 1 means Biden
     count = 0
     finalJson = {}
-<<<<<<< HEAD
     percentDem = {}
     counties = {}
     x = 1 
        
-=======
-    percentDem = []
-    x = 1
-
->>>>>>> c57cc19e20a2d7c8744ad67bb2ef5da2eb6c0051
     for index, row in condensed_df.iterrows():
         if i == 0:
             count = count + row["total_votes"]
@@ -145,10 +140,9 @@ def index():
             count = 0
             x = x + 1
 
-    countyIds_data = return_list[2]
+    countyIds_data = return_list[3]
     countyIds_json = json.loads(countyIds_data)
 
-<<<<<<< HEAD
     for element in countyIds_json:
         ids = element.get("id")
         names = element.get("name")
@@ -162,11 +156,6 @@ def index():
     finalJson.update({"percentDem": percentDem})
     finalJson.update({"countyIDs": counties})
     
-=======
-    finalJson.update({"percentDem": percentDem})
-    finalJson.update({"countyIDs": countyIds_json})
-
->>>>>>> c57cc19e20a2d7c8744ad67bb2ef5da2eb6c0051
     return finalJson
 
 
