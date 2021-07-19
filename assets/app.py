@@ -23,8 +23,9 @@ def getData():
     candidate = mongo.db.pCandidate.find()
     state = mongo.db.pState.find()
     county = mongo.db.pCounty.find()
+    county_IDs = mongo.db.countyIds.find()
 
-    all_data = [candidate, state, county]
+    all_data = [candidate, state, county, county_IDs]
 
     return all_data
 
@@ -139,7 +140,7 @@ def index():
             count = 0
             x = x + 1
 
-    countyIds_data = return_list[2]
+    countyIds_data = return_list[3]
     countyIds_json = json.loads(countyIds_data)
 
     for element in countyIds_json:
@@ -150,7 +151,6 @@ def index():
 
     finalJson.update({"percentDem": percentDem})
     finalJson.update({"countyIDs": counties})
-
     return finalJson
 
 
@@ -158,25 +158,6 @@ def index():
 def getAllRecords(tableNumber):
     all_data = getData()
     return dumps(all_data[int(tableNumber)])
-
-
-# @app.route("/getDataForSunburstChart")
-# def getDataForSunburstChart():
-#     all_data = getData()
-#      # Create the Plotly Data Structure
-#     graph = dict(
-#         data=[x=],
-#         layout=dict(
-#             title='Bar Plot',
-#             yaxis=dict(
-#                 title="Count"
-#             ),
-#             xaxis=dict(
-#                 title="Fruit"
-#             )
-#         )
-#     )
-#     return render_template('html/sunburstCharts.html', data=dumps(all_data[0]))
 
 
 if __name__ == "__main__":
