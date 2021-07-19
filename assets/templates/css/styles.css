@@ -43,3 +43,13 @@ svg {
   display: block;
   margin: auto;
 }
+
+.nopadding {
+  padding: 0 !important;
+}
+.main-svg {
+  background: none !important;
+}
+rect.bg {
+  fill: transparent !important;
+}

@@ -117,16 +117,10 @@ def index():
     i = 0         # 0 means Trump, 1 means Biden
     count = 0
     finalJson = {}
-<<<<<<< HEAD
     percentDem = {}
     counties = {}
-    x = 1 
-       
-=======
-    percentDem = []
     x = 1
 
->>>>>>> c57cc19e20a2d7c8744ad67bb2ef5da2eb6c0051
     for index, row in condensed_df.iterrows():
         if i == 0:
             count = count + row["total_votes"]
@@ -148,25 +142,15 @@ def index():
     countyIds_data = return_list[2]
     countyIds_json = json.loads(countyIds_data)
 
-<<<<<<< HEAD
     for element in countyIds_json:
         ids = element.get("id")
         names = element.get("name")
-        
-        counties.update({ids:names})
 
+        counties.update({ids: names})
 
-
-
-    
     finalJson.update({"percentDem": percentDem})
     finalJson.update({"countyIDs": counties})
-    
-=======
-    finalJson.update({"percentDem": percentDem})
-    finalJson.update({"countyIDs": countyIds_json})
 
->>>>>>> c57cc19e20a2d7c8744ad67bb2ef5da2eb6c0051
     return finalJson
 
 
@@ -174,6 +158,25 @@ def index():
 def getAllRecords(tableNumber):
     all_data = getData()
     return dumps(all_data[int(tableNumber)])
+
+
+# @app.route("/getDataForSunburstChart")
+# def getDataForSunburstChart():
+#     all_data = getData()
+#      # Create the Plotly Data Structure
+#     graph = dict(
+#         data=[x=],
+#         layout=dict(
+#             title='Bar Plot',
+#             yaxis=dict(
+#                 title="Count"
+#             ),
+#             xaxis=dict(
+#                 title="Fruit"
+#             )
+#         )
+#     )
+#     return render_template('html/sunburstCharts.html', data=dumps(all_data[0]))
 
 
 if __name__ == "__main__":

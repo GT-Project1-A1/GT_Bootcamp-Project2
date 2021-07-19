@@ -1,27 +1,13 @@
 // Access flask app for election2020 data (from Mongo)
-<<<<<<< HEAD
-d3.json("http://127.0.0.1:5000/").then(function(data) {
-
-  var counties;
-  var percentData = Object.values(data.percentDem);
-=======
 d3.json('http://127.0.0.1:5000/').then(function (data) {
   var counties
-  var percentData = Object.values(data)
->>>>>>> c57cc19e20a2d7c8744ad67bb2ef5da2eb6c0051
+  var percentData = Object.values(data.percentDem)
 
   // Pull topojson data to build map (https://bl.ocks.org/mbostock/4090848)
   d3.json('https://unpkg.com/us-atlas@1/us/10m.json').then(function (us) {
     // Define county and state data sets
-<<<<<<< HEAD
-    var countyData = us.objects.counties;
-    var stateData = us.objects.states;
-=======
     var countyData = us.objects.counties
-    var someData = topojson.feature(us, countyData).features
-    console.log(someData)
     var stateData = us.objects.states
->>>>>>> c57cc19e20a2d7c8744ad67bb2ef5da2eb6c0051
 
     // Define width and and height of svg
     const width = 975
@@ -54,75 +40,14 @@ d3.json('http://127.0.0.1:5000/').then(function (data) {
     var g = svg.append('g')
 
     // Define color
-<<<<<<< HEAD
-    var color = d3.scaleLinear()
-    .domain([0, .5, 1])
-    .range(["red", "purple", "blue"])
-=======
     var color = d3
       .scaleLinear()
-      .range(['red', 'blue'])
-      .domain([0, 1])
-
-    color.domain(d3.extent(_.toArray(percentData)))
->>>>>>> c57cc19e20a2d7c8744ad67bb2ef5da2eb6c0051
+      .domain([0, 0.5, 1])
+      .range(['red', 'purple', 'blue'])
 
     var states
     addMap()
 
-<<<<<<< HEAD
-      
-  // FUNCTION
-
-  function addMap() {
-    // Add the map 
-    states = g.append("g")
-        .attr("cursor", "pointer")
-        .attr("fill", "#444")
-        .classed("map", true)
-        .selectAll("path")
-          .data(topojson.feature(us, stateData).features)
-          .enter().append("path") 
-            .on("click", clicked)
-            .attr("d", path)
-            .style("fill", function(d) {
-              var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
-              var value = data.percentDem[index];
-              console.log(value);
-              return (value)? color(value): "#444"; 
-            });
-
-    // Add white lines between states
-    g.append("path")
-    .attr("fill", "none")
-    .attr("stroke", "white")
-    .attr("stroke-linejoin", "round")
-    .attr("d", path(topojson.mesh(us, stateData, (a, b) => a !== b)))
-    .classed("states", true);
-  }
-  
-  
-  // Function when user clicks on a state
-  function clicked(event, d) {
-    const [[x0, y0], [x1, y1]] = path.bounds(d);
-
-    event.stopPropagation();
-
-    states.transition()
-    .style("fill", null)
-    .selectAll("path")
-
-    counties = g.append("g").selectAll("path")
-      .data(topojson.feature(us, countyData).features)
-      .enter().append("path") 
-        .attr("d", path)
-        .attr("stroke", "black")
-        .style("fill", function(d) {
-          var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
-          var value = data.countyIDs;
-          return (value)? color(value) : "green"; 
-    });
-=======
     // FUNCTION
 
     function addMap () {
@@ -140,10 +65,44 @@ d3.json('http://127.0.0.1:5000/').then(function (data) {
         .attr('d', path)
         .style('fill', function (d) {
           var index = d.id // index of topojson states are missing numbers (e.g. there is no "03" state id)
-          var value = data[index]
-          return value ? color(value) : '#AAA'
+          var value = data.percentDem[index]
+          console.log(value)
+          return value ? color(value) : '#444'
         })
->>>>>>> c57cc19e20a2d7c8744ad67bb2ef5da2eb6c0051
+
+      // Add white lines between states
+      g.append('path')
+        .attr('fill', 'none')
+        .attr('stroke', 'white')
+        .attr('stroke-linejoin', 'round')
+        .attr('d', path(topojson.mesh(us, stateData, (a, b) => a !== b)))
+        .classed('states', true)
+    }
+
+    // Function when user clicks on a state
+    function clicked (event, d) {
+      const [[x0, y0], [x1, y1]] = path.bounds(d)
+
+      event.stopPropagation()
+
+      states
+        .transition()
+        .style('fill', null)
+        .selectAll('path')
+
+      counties = g
+        .append('g')
+        .selectAll('path')
+        .data(topojson.feature(us, countyData).features)
+        .enter()
+        .append('path')
+        .attr('d', path)
+        .attr('stroke', 'black')
+        .style('fill', function (d) {
+          var index = d.id // index of topojson states are missing numbers (e.g. there is no "03" state id)
+          var value = data.countyIDs
+          return value ? color(value) : 'green'
+        })
 
       // Add white lines between states
       g.append('path')

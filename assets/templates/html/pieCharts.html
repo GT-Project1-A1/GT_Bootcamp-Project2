@@ -11,18 +11,13 @@
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Load plotly.js CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.2.0.min.js"></script>
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="../css/styles.css" type="text/css" />
-    <link rel="stylesheet" href="../css/table.css" type="text/css" />
-
     <title>Elections 2020 Visualization</title>
   </head>
   <body>
-    <!-- Navigation Bar -->
     <nav class="navbar navbar-custom">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -47,7 +42,7 @@
               ></a>
               <ul class="dropdown-menu">
                 <li><a href="#">Statewise</a></li>
-                <li><a href="#">TBD</a></li>
+                <li><a href="pieCharts.html">Pie Chart</a></li>
                 <li><a href="#">TBD</a></li>
               </ul>
             </li>
@@ -57,16 +52,18 @@
         </div>
       </div>
     </nav>
-    <!-- Tabular data -->
     <div class="container-fluid">
-      <h2 class="text-center">2020 Election Data</h2>
-      <div class="row" id="table1"></div>
-      <div class="row mt-4" id="table2"></div>
-      <div class="row mt-4" id="table3"></div>
+      <div class="row text-center">
+        <h2>States vs No.of Votes Registered</h2>
+        <div
+          class="col-md-2 col-md-offset-3 col-sm-12 nopadding"
+          id="pieChart"
+          style="width:800px;height:500px"
+        ></div>
+      </div>
     </div>
-    <!-- Importing new Gridjs library's jquery integration for pagination and tabulation-->
-    <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
-
-    <script src="../js/tablePagination.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+    <script src="../js/pieChart.js"></script>
   </body>
 </html>
