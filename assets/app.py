@@ -25,7 +25,7 @@ def getData():
     county = mongo.db.pCounty.find()
     county_IDs = mongo.db.countyIds.find()
 
-    all_data = [candidate, state, county, county_IDs ]
+    all_data = [candidate, state, county, county_IDs]
 
     return all_data
 
