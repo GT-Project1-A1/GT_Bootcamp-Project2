@@ -95,7 +95,7 @@ def index():
     for dataset in all_data:
 
         list_cur = list(dataset)
-        json_data = dumps(list_cur)
+        json_data = dumps(list_cur, ensure_ascii=False).encode('utf8')
         return_list.append(json_data)
 
     # Pull only candidate data
@@ -118,8 +118,7 @@ def index():
     i = 0         # 0 means Trump, 1 means Biden
     count = 0
     finalJson = {}
-    percentDem = {}
-    counties = {}
+    percentDemStates = {}
     x = 1 
        
     for index, row in condensed_df.iterrows():
@@ -129,32 +128,130 @@ def index():
         else:
             count = count + row["total_votes"]
             percent = row["total_votes"] / count
-            state = row.name[0]
-            state_id = state_ids.get(state)
+            thestate = row.name[0]
+            state_id = state_ids.get(thestate)
 
             state_info = {state_id: percent}
 
-            percentDem.update(state_info)
+            percentDemStates.update(state_info)
 
             i = 0
             count = 0
             x = x + 1
 
+            
+            
+    # County votes calculation
+    
+    # Pull in topojson county ID data from mongo
+    counties = pd.DataFrame(columns = ['Name', 'ID'])
     countyIds_data = return_list[3]
     countyIds_json = json.loads(countyIds_data)
-
+    
+    # Create dictionary with county name keys and id values
     for element in countyIds_json:
         ids = element.get("id")
         names = element.get("name")
         
-        counties.update({ids:names})
+        if names == "De Kalb":
+            names = "DeKalb"
+        
+        counties = counties.append({'Name' : names, 'ID' : ids}, ignore_index = True)
 
+    # Clean data
+    # Delete "County" from any county names
+    county_name_list = candidate_df["county"].tolist()
+    
+    new_county_list = []
+    for county in county_name_list:
+        
+        county_end = county.find(' County')
+        parish_end = county.find(' Parish')
+        ctytwnship_end = county.find( ' Cty Townships')
+        
+        if county_end > 0:
+            updated_county = county[0:county_end]
+        elif parish_end > 0:
+            updated_county = county[0:parish_end]
+        elif ctytwnship_end > 0:
+            updated_county = county[0:ctytwnship_end]
+        else:
+            updated_county = county
+            
+        new_county_list.append(updated_county)
 
-
+    # Change original county names with new county list
+    candidate_df["new_county_name"] = new_county_list
+    
+    
+    # Append state IDs
+    # Define blank state id list
+    state_id_lst = []
+    
+    # Pull un-edited state column from original dataset
+    state_lst = candidate_df["state"]
+    
+    # Loop through state_lst and append the state id (taken from the state_ids dict) to a new list (state_id_lst)
+    for astate in state_lst:
+        the_id = state_ids.get(astate)
+        the_id = int(the_id)*1000
+        state_id_lst.append(the_id)
+    
+    # Add a column to the candidate_df of the corresponding state ids
+    candidate_df["state_id"] = state_id_lst  
+    
+    
+    # Calculate Democrat win percentage
+    i = 0         # 0 means Trump, 1 means Biden
+    count = 0
+    percentDemCounties = {}
+    x = 1 
 
     
-    finalJson.update({"percentDem": percentDem})
-    finalJson.update({"countyIDs": counties})
+    countiesCandidate_df = candidate_df.groupby(["new_county_name","state_id", "candidate" ]).sum()
+    
+    
+    
+    
+    for index, row in countiesCandidate_df.iterrows():
+        
+        if i == 0:
+            count = count + row["total_votes"]
+            i = i + 1
+        else:
+            count = count + row["total_votes"]
+            
+            # Two "counties" in the dataset (Cary Plt. and Kingsbury Plt.) have Biden and Trump at 0 votes so go 50% for each
+            try:
+                percent = row["total_votes"] / count
+            
+            except:
+                percent = .5
+                
+            
+            county = row.name[0]
+            state_id = row.name[1]              
+            
+            try:
+                county_id_df = counties.loc[(counties["Name"] == county) & (counties["ID"] > state_id) & (counties["ID"] < state_id + 1000), :] 
+                county_id = county_id_df['ID'].values[0]
+            
+            except:
+                county_id = None              
+            
+            if county_id != None: 
+                county_info = {county_id: percent}
+                percentDemCounties.update(county_info)
+                
+
+                
+
+            i = 0
+            count = 0
+            x = x + 1
+    
+    finalJson.update({"percentDemStates": percentDemStates})
+    finalJson.update({"percentDemCounties": percentDemCounties})
     
     return finalJson
 

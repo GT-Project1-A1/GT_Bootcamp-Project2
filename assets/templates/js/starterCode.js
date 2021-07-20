@@ -1,19 +1,18 @@
 // Access flask app for election2020 data (from Mongo)
 d3.json("http://127.0.0.1:5000/").then(function(data) {
 
-  var counties;
-  var percentData = Object.values(data.percentDem);
-
-  // Pull topojson data to build map (https://bl.ocks.org/mbostock/4090848)
-  d3.json('https://unpkg.com/us-atlas@1/us/10m.json').then(function (us) {
+  // Pull topojson data to build map (https://github.com/topojson/us-atlas)
+  d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json").then(function (us) {
+    
     // Define county and state data sets
-    var countyData = us.objects.counties;
     var stateData = us.objects.states;
+    var countyData = us.objects.counties;
 
     // Define width and and height of svg
     const width = 975
     const height = 610
 
+    // Define zoom size
     const zoom = d3
       .zoom()
       .scaleExtent([1, 8])
@@ -40,111 +39,113 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
     var svg = d3.select('svg')
     var g = svg.append('g')
 
-    // Define color
+    // Define color scale (republican red -> flip state purple -> democrat blue)
     var color = d3.scaleLinear()
     .domain([0, .5, 1])
     .range(["red", "purple", "blue"])
 
-    var states
     addMap()
 
-      
-  // FUNCTION
+    // FUNCTIONs
 
-  function addMap() {
-    // Add the map 
-    states = g.append("g")
-        .attr("cursor", "pointer")
-        .attr("fill", "#444")
-        .classed("map", true)
+    function addMap() {
+      // Add the map 
+
+      var states = g.append("g")
+          .attr("cursor", "pointer") // Add a cursor to indicate ability to click
+          .attr("fill", "#444")
+          .classed("map", true)
         .selectAll("path")
-          .data(topojson.feature(us, stateData).features)
-          .enter().append("path") 
-            .on("click", clicked)
-            .attr("d", path)
-            .style("fill", function(d) {
-              var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
-              var value = data.percentDem[index];
-              console.log(value);
-              return (value)? color(value): "#444"; 
-            });
+        .data(topojson.feature(us, stateData).features)
+        .join("path") 
+          .on("click", clicked)
+          .attr("d", path)
+          .classed("states", true)
+          .style("fill", function(d) {
+            var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
+            var value = data.percentDemStates[index];
+            return (value)? color(value): "#444"; 
+          });
 
-    // Add white lines between states
-    g.append("path")
-    .attr("fill", "none")
-    .attr("stroke", "white")
-    .attr("stroke-linejoin", "round")
-    .attr("d", path(topojson.mesh(us, stateData, (a, b) => a !== b)))
-    .classed("states", true);
-  }
-  
-  
-  // Function when user clicks on a state
-  function clicked(event, d) {
-    const [[x0, y0], [x1, y1]] = path.bounds(d);
+        states.append("title")
+          // .text(d => d.properties.name)
+          .text(function (d) {
+            var index = d.id;
+            var value = data.percentDemStates[index]*100;
+            var state = d.properties.name;
+            return index ? state + " -> Joe Biden: " + value.toFixed(1) + "%" : 'No Data';
+          }); // hover over states to see what state
 
-    event.stopPropagation();
 
-    states.transition()
-    .style("fill", null)
-    .selectAll("path")
 
-    counties = g.append("g").selectAll("path")
-      .data(topojson.feature(us, countyData).features)
-      .enter().append("path") 
-        .attr("d", path)
-        .attr("stroke", "black")
-        .style("fill", function(d) {
-          var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
-          var value = data.countyIDs;
-          return (value)? color(value) : "green"; 
-    });
 
       // Add white lines between states
-      g.append('path')
-        .attr('fill', 'none')
-        .attr('stroke', 'white')
-        .attr('stroke-linejoin', 'round')
-        .attr('d', path(topojson.mesh(us, stateData, (a, b) => a !== b)))
-        .classed('counties', true)
-    }
+      var stateLines = g.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr("stroke-linejoin", "round")
+        .attr("d", path(topojson.mesh(us, stateData, (a, b) => a !== b)))
+        .classed("stateLines", true);
+
+    };
 
     // Function when user clicks on a state
     function clicked (event, d) {
+
+      // Define polygon coordinates of what was clicked. Used to zoom in on the state
       const [[x0, y0], [x1, y1]] = path.bounds(d)
 
       event.stopPropagation()
-
-      states
-        .transition()
-        .style('fill', null)
-        .selectAll('path')
-
-      counties = g
-        .append('g')
+      
+      var counties = g.append('g')
+        .classed("counties", true) // Used to remove in reset function below
         .selectAll('path')
         .data(topojson.feature(us, countyData).features)
-        .enter()
-        .append('path')
-        .attr('d', path)
-        .attr('stroke', 'black')
-        .style('fill', function (d) {
-          var index = d.id // index of topojson states are missing numbers (e.g. there is no "03" state id)
-          console.log(index)
-          var value = data[index]
-          return value ? color(value) : 'green'
-        })
+        .join('path')
+          .attr('d', path)
+          .attr('stroke', 'black')
+          .style("fill", "transparent")
+          .style('fill', function (d) {
+            var index = d.id; // index of topojson states are missing numbers (e.g. there is no "03" state id)
+            // If id has a 0 at the front, eliminate the 0
+            if (index.charAt(0) == 0 ) {
+              index = index.substring(1);
+            }
+            var value = data.percentDemCounties[index];
+            // console.log(`${index}: ${value}`)
+            return value ? color(value) : '#AAA';
+          })
+          .append("title")
+            .text(d => d.properties.name);
+
 
       // Add white lines between states
-      g.append('path')
+      var countyLines = g.append('path')
         .attr('fill', 'none')
-        .attr('stroke', 'white')
+        .attr('stroke', 'black')
         .attr('stroke-linejoin', 'round')
-        .attr('d', path(topojson.mesh(us, stateData, (a, b) => a !== b)))
+        .attr('d', path(topojson.mesh(us, countyData, (a, b) => a !== b)))
+        .classed("countyLines", true); // Used to remove in reset function below
 
-      // d3.select(this)
-      //   .transition()
-      //   .style("fill", "black")
+
+      var clickState = g.append("g")
+        .classed("clickState", true) // Used to remove in reset function below
+        .selectAll("path")
+        .data(topojson.feature(us, stateData).features)
+        .join("path")
+          .attr("d", path)
+          .attr("stroke", "white")
+          .attr("fill", "none");
+        
+
+      // Add white lines between states
+      var clickStateLines = g.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr("stroke-linejoin", "round")
+        .attr("d", path(topojson.mesh(us, stateData, (a, b) => a !== b)))
+        .classed("clickStateLines", true); // Used to remove in reset function below
+
 
       svg
         .transition()
@@ -160,6 +161,7 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
           d3.pointer(event, svg.node())
         )
     }
+        
 
     // Function adjust graph as you zoom in on it
     function zoomed (event) {
@@ -170,11 +172,10 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
 
     // Function to reset the page after user has click away from counties view
     function reset () {
-      states.style('fill', function (d, i) {
-        var index = d.id
-        var value = data[index]
-        return value ? color(value) : '#AAA'
-      })
+      d3.select("g.counties").remove();
+      d3.select("g.clickState").remove()
+      d3.selectAll("path.countyLines").remove();
+      d3.selectAll("path.clickStateLines").remove();    
 
       svg
         .transition()
@@ -185,5 +186,5 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
           d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
         )
     }
-  })
-})
+  });
+});
