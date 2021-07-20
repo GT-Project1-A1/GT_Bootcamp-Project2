@@ -15085,15 +15085,15 @@ New Jersey,Mercer County,Rocky De La Fuente,ALI,136,FALSE
 New Jersey,Mercer County,Gloria La Riva,PSL,125,FALSE
 New Jersey,Mercer County,Bill Hammons,UTY,91,FALSE
 New Jersey,Mercer County,Don Blankenship,CST,88,FALSE
-New Jersey,Middlesex County,Joe Biden,DEM,226250,TRUE
-New Jersey,Middlesex County,Donald Trump,REP,143467,FALSE
-New Jersey,Middlesex County,Jo Jorgensen,LIB,2554,FALSE
-New Jersey,Middlesex County, Write-ins,WRI,1330,FALSE
-New Jersey,Middlesex County,Howie Hawkins,GRN,1221,FALSE
-New Jersey,Middlesex County,Gloria La Riva,PSL,249,FALSE
-New Jersey,Middlesex County,Don Blankenship,CST,247,FALSE
-New Jersey,Middlesex County,Bill Hammons,UTY,198,FALSE
-New Jersey,Middlesex County,Rocky De La Fuente,ALI,176,FALSE
+Massachusetts,Middlesex County,Joe Biden,DEM,226250,TRUE
+Massachusetts,Middlesex County,Donald Trump,REP,143467,FALSE
+Massachusetts,Middlesex County,Jo Jorgensen,LIB,2554,FALSE
+Massachusetts,Middlesex County, Write-ins,WRI,1330,FALSE
+Massachusetts,Middlesex County,Howie Hawkins,GRN,1221,FALSE
+Massachusetts,Middlesex County,Gloria La Riva,PSL,249,FALSE
+Massachusetts,Middlesex County,Don Blankenship,CST,247,FALSE
+Massachusetts,Middlesex County,Bill Hammons,UTY,198,FALSE
+Massachusetts,Middlesex County,Rocky De La Fuente,ALI,176,FALSE
 New Jersey,Monmouth County,Donald Trump,REP,191808,TRUE
 New Jersey,Monmouth County,Joe Biden,DEM,181291,FALSE
 New Jersey,Monmouth County,Jo Jorgensen,LIB,2708,FALSE
@@ -15679,12 +15679,12 @@ New York,Steuben County,Jo Jorgensen,LIB,570,FALSE
 New York,Steuben County,Brock Pierce,IND,167,FALSE
 New York,Steuben County,Howie Hawkins,GRN,164,FALSE
 New York,Steuben County, Write-ins,WRI,14,FALSE
-New York,Suffolk County,Donald Trump,REP,381253,TRUE
-New York,Suffolk County,Joe Biden,DEM,381021,FALSE
-New York,Suffolk County,Jo Jorgensen,LIB,4593,FALSE
-New York,Suffolk County,Brock Pierce,IND,2539,FALSE
-New York,Suffolk County,Howie Hawkins,GRN,2135,FALSE
-New York,Suffolk County, Write-ins,WRI,0,FALSE
+Massachusetts,Suffolk County,Donald Trump,REP,381253,TRUE
+Massachusetts,Suffolk County,Joe Biden,DEM,381021,FALSE
+Massachusetts,Suffolk County,Jo Jorgensen,LIB,4593,FALSE
+Massachusetts,Suffolk County,Brock Pierce,IND,2539,FALSE
+Massachusetts,Suffolk County,Howie Hawkins,GRN,2135,FALSE
+Massachusetts,Suffolk County, Write-ins,WRI,0,FALSE
 New York,Sullivan County,Donald Trump,REP,18665,TRUE
 New York,Sullivan County,Joe Biden,DEM,15489,FALSE
 New York,Sullivan County,Jo Jorgensen,LIB,247,FALSE
@@ -21434,28 +21434,28 @@ Vermont,Barre,Zachary Scalf,IND,1,FALSE
 Vermont,Barre,Rocky De La Fuente,ALI,0,FALSE
 Vermont,Barre,Blake Huber,APV,0,FALSE
 Vermont,Barre,Jerome Segal,BAR,0,FALSE
-Vermont,Middlesex,Joe Biden,DEM,977,TRUE
-Vermont,Middlesex,Donald Trump,REP,231,FALSE
-Vermont,Middlesex,Jo Jorgensen,LIB,12,FALSE
-Vermont,Middlesex,Howie Hawkins,GRN,5,FALSE
-Vermont,Middlesex,Brooke Paige,GOP,5,FALSE
-Vermont,Middlesex,Kanye West,IND,3,FALSE
-Vermont,Middlesex, Write-ins,WRI,3,FALSE
-Vermont,Middlesex,Gary Swing,BFP,2,FALSE
-Vermont,Middlesex,Don Blankenship,CST,1,FALSE
-Vermont,Middlesex,Kyle Kopitke,IAP,1,FALSE
-Vermont,Middlesex,Christopher LaFontaine,IND,1,FALSE
-Vermont,Middlesex,Brock Pierce,IND,1,FALSE
-Vermont,Middlesex,Jerome Segal,BAR,1,FALSE
-Vermont,Middlesex,Brian Carroll,ASP,0,FALSE
-Vermont,Middlesex,Phil Collins,PRO,0,FALSE
-Vermont,Middlesex,Rocky De La Fuente,ALI,0,FALSE
-Vermont,Middlesex,Richard Duncan,IND,0,FALSE
-Vermont,Middlesex,Blake Huber,APV,0,FALSE
-Vermont,Middlesex,Alyson Kennedy,SWP,0,FALSE
-Vermont,Middlesex,Gloria La Riva,PSL,0,FALSE
-Vermont,Middlesex,Keith McCormic,BMP,0,FALSE
-Vermont,Middlesex,Zachary Scalf,IND,0,FALSE
+Vermont,Middlesex Town,Joe Biden,DEM,977,TRUE
+Vermont,Middlesex Town,Donald Trump,REP,231,FALSE
+Vermont,Middlesex Town,Jo Jorgensen,LIB,12,FALSE
+Vermont,Middlesex Town,Howie Hawkins,GRN,5,FALSE
+Vermont,Middlesex Town,Brooke Paige,GOP,5,FALSE
+Vermont,Middlesex Town,Kanye West,IND,3,FALSE
+Vermont,Middlesex Town, Write-ins,WRI,3,FALSE
+Vermont,Middlesex Town,Gary Swing,BFP,2,FALSE
+Vermont,Middlesex Town,Don Blankenship,CST,1,FALSE
+Vermont,Middlesex Town,Kyle Kopitke,IAP,1,FALSE
+Vermont,Middlesex Town,Christopher LaFontaine,IND,1,FALSE
+Vermont,Middlesex Town,Brock Pierce,IND,1,FALSE
+Vermont,Middlesex Town,Jerome Segal,BAR,1,FALSE
+Vermont,Middlesex Town,Brian Carroll,ASP,0,FALSE
+Vermont,Middlesex Town,Phil Collins,PRO,0,FALSE
+Vermont,Middlesex Town,Rocky De La Fuente,ALI,0,FALSE
+Vermont,Middlesex Town,Richard Duncan,IND,0,FALSE
+Vermont,Middlesex Town,Blake Huber,APV,0,FALSE
+Vermont,Middlesex Town,Alyson Kennedy,SWP,0,FALSE
+Vermont,Middlesex Town,Gloria La Riva,PSL,0,FALSE
+Vermont,Middlesex Town,Keith McCormic,BMP,0,FALSE
+Vermont,Middlesex Town,Zachary Scalf,IND,0,FALSE
 Vermont,Middletown Springs,Joe Biden,DEM,308,TRUE
 Vermont,Middletown Springs,Donald Trump,REP,225,FALSE
 Vermont,Middletown Springs, Write-ins,WRI,4,FALSE
@@ -22864,28 +22864,28 @@ Vermont,Sheffield,Zachary Scalf,IND,0,FALSE
 Vermont,Sheffield,Jerome Segal,BAR,0,FALSE
 Vermont,Sheffield,Gary Swing,BFP,0,FALSE
 Vermont,Sheffield, Write-ins,WRI,0,FALSE
-Vermont,Berkshire,Donald Trump,REP,402,TRUE
-Vermont,Berkshire,Joe Biden,DEM,284,FALSE
-Vermont,Berkshire,Jo Jorgensen,LIB,9,FALSE
-Vermont,Berkshire,Kanye West,IND,5,FALSE
-Vermont,Berkshire, Write-ins,WRI,3,FALSE
-Vermont,Berkshire,Christopher LaFontaine,IND,2,FALSE
-Vermont,Berkshire,Brooke Paige,GOP,2,FALSE
-Vermont,Berkshire,Don Blankenship,CST,1,FALSE
-Vermont,Berkshire,Phil Collins,PRO,1,FALSE
-Vermont,Berkshire,Richard Duncan,IND,1,FALSE
-Vermont,Berkshire,Jerome Segal,BAR,1,FALSE
-Vermont,Berkshire,Brian Carroll,ASP,0,FALSE
-Vermont,Berkshire,Rocky De La Fuente,ALI,0,FALSE
-Vermont,Berkshire,Howie Hawkins,GRN,0,FALSE
-Vermont,Berkshire,Blake Huber,APV,0,FALSE
-Vermont,Berkshire,Alyson Kennedy,SWP,0,FALSE
-Vermont,Berkshire,Kyle Kopitke,IAP,0,FALSE
-Vermont,Berkshire,Gloria La Riva,PSL,0,FALSE
-Vermont,Berkshire,Keith McCormic,BMP,0,FALSE
-Vermont,Berkshire,Brock Pierce,IND,0,FALSE
-Vermont,Berkshire,Zachary Scalf,IND,0,FALSE
-Vermont,Berkshire,Gary Swing,BFP,0,FALSE
+Massachusetts,Berkshire,Donald Trump,REP,402,TRUE
+Massachusetts,Berkshire,Joe Biden,DEM,284,FALSE
+Massachusetts,Berkshire,Jo Jorgensen,LIB,9,FALSE
+Massachusetts,Berkshire,Kanye West,IND,5,FALSE
+Massachusetts,Berkshire, Write-ins,WRI,3,FALSE
+Massachusetts,Berkshire,Christopher LaFontaine,IND,2,FALSE
+Massachusetts,Berkshire,Brooke Paige,GOP,2,FALSE
+Massachusetts,Berkshire,Don Blankenship,CST,1,FALSE
+Massachusetts,Berkshire,Phil Collins,PRO,1,FALSE
+Massachusetts,Berkshire,Richard Duncan,IND,1,FALSE
+Massachusetts,Berkshire,Jerome Segal,BAR,1,FALSE
+Massachusetts,Berkshire,Brian Carroll,ASP,0,FALSE
+Massachusetts,Berkshire,Rocky De La Fuente,ALI,0,FALSE
+Massachusetts,Berkshire,Howie Hawkins,GRN,0,FALSE
+Massachusetts,Berkshire,Blake Huber,APV,0,FALSE
+Massachusetts,Berkshire,Alyson Kennedy,SWP,0,FALSE
+Massachusetts,Berkshire,Kyle Kopitke,IAP,0,FALSE
+Massachusetts,Berkshire,Gloria La Riva,PSL,0,FALSE
+Massachusetts,Berkshire,Keith McCormic,BMP,0,FALSE
+Massachusetts,Berkshire,Brock Pierce,IND,0,FALSE
+Massachusetts,Berkshire,Zachary Scalf,IND,0,FALSE
+Massachusetts,Berkshire,Gary Swing,BFP,0,FALSE
 Vermont,Shelburne,Joe Biden,DEM,4358,TRUE
 Vermont,Shelburne,Donald Trump,REP,953,FALSE
 Vermont,Shelburne, Write-ins,WRI,38,FALSE
@@ -27224,10 +27224,10 @@ West Virginia,Greenbrier County,Donald Trump,REP,10925,TRUE
 West Virginia,Greenbrier County,Joe Biden,DEM,4655,FALSE
 West Virginia,Greenbrier County,Jo Jorgensen,LIB,210,FALSE
 West Virginia,Greenbrier County,Howie Hawkins,GRN,60,FALSE
-West Virginia,Hampshire County,Donald Trump,REP,8033,TRUE
-West Virginia,Hampshire County,Joe Biden,DEM,1939,FALSE
-West Virginia,Hampshire County,Jo Jorgensen,LIB,93,FALSE
-West Virginia,Hampshire County,Howie Hawkins,GRN,21,FALSE
+Massachusetts,Hampshire County,Donald Trump,REP,8033,TRUE
+Massachusetts,Hampshire County,Joe Biden,DEM,1939,FALSE
+Massachusetts,Hampshire County,Jo Jorgensen,LIB,93,FALSE
+Massachusetts,Hampshire County,Howie Hawkins,GRN,21,FALSE
 West Virginia,Hancock County,Donald Trump,REP,9806,TRUE
 West Virginia,Hancock County,Joe Biden,DEM,3790,FALSE
 West Virginia,Hancock County,Jo Jorgensen,LIB,161,FALSE

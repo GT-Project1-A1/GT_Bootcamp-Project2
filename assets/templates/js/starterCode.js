@@ -86,7 +86,6 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
         .attr("stroke-linejoin", "round")
         .attr("d", path(topojson.mesh(us, stateData, (a, b) => a !== b)))
         .classed("stateLines", true);
-
     };
 
     // Function when user clicks on a state
