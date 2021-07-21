@@ -252,6 +252,62 @@ def getAllRecords(tableNumber):
     all_data = getData()
     return dumps(all_data[int(tableNumber)])
 
+# Part of Dashboard
+# Query the county's vote information under State
+@app.route('/get_state_data/<state_name>', methods=['GET'])
+def get_state_data(state_name):
+    # Check that if the entered State name is valid 
+    states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
+    states = set(states)
+    if state_name not in states:
+        return {}
+    # Query the information realted to State from MongoDb 
+    candidate = mongo.db.pCandidate.find({"state": state_name})
+    state = mongo.db.pState.find_one({"state": state_name})
+    county = mongo.db.pCounty.find({"state": state_name})
+    # Get total_votes for State 
+    total_votes = state["total_votes"]
+    # Format County_data
+    county_data = {}
+    for d in county: # Get state data from pCounty collection
+        county_data[d["county"]] = {}
+        county_data[d["county"]]["name"] = d["county"].replace("County", "").strip(" ")
+        county_data[d["county"]]["current_votes"] = d["current_votes"]
+        county_data[d["county"]]["total_votes"] = d["total_votes"]
+        county_data[d["county"]]["percent"] = d["percent"]
+        county_data[d["county"]]["candidate_data"] = {}
+    for d in candidate: # Get candidate data from pCandidate collection
+        county_data[d["county"]]["candidate_data"][d["candidate"]] = {}
+        county_data[d["county"]]["candidate_data"][d["candidate"]]["candidate"] = d["candidate"]
+        county_data[d["county"]]["candidate_data"][d["candidate"]]["party"] = d["party"]
+        county_data[d["county"]]["candidate_data"][d["candidate"]]["total_votes"] = d["total_votes"]
+        county_data[d["county"]]["candidate_data"][d["candidate"]]["won"] = d["won"]
+    # Return results
+    return jsonify({
+        "state_name" : state_name,
+        "total_votes" : total_votes,
+        "county_data" : county_data
+    })
+
+# Query state's data  
+@app.route('/get_state_data', methods=['GET'])
+def get_states():
+    # Query candidate's data from MongoDb
+    candidate = mongo.db.pCandidate.find()
+    # Format state's data
+    state_data = {}
+    for d in candidate:
+        state = d["state"]
+        candidate = d["candidate"]
+        total_votes = d["total_votes"]
+        if state not in state_data.keys():
+            state_data[state] = {}
+        if candidate not in state_data[state].keys():
+            state_data[state][candidate] = 0
+        state_data[state][candidate] += total_votes
+    # Return state_data
+    return state_data
+
 
 if __name__ == "__main__":
     app.run(debug=True)
