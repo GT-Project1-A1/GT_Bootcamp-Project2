@@ -1,14 +1,15 @@
 d3.json('http://127.0.0.1:5000/getAllRecords/1').then(function (data) {
   filtered_data = data.filter(d => d.state != 'United States')
   labels = filtered_data.map(d => d.state)
-  values = data.map(d => d['total_votes'])
+  filtered_labels = labels.filter(d => d != 'United States')
+  values = filtered_data.map(d => d['total_votes'])
   graph_data = [
     {
       type: 'pie',
       labels: labels,
       values: values,
       textinfo: 'value',
-      hoverinfo: 'value',
+      hoverinfo: 'label+value',
       textposition: 'inside',
       insidetextorientation: 'radial'
     }
