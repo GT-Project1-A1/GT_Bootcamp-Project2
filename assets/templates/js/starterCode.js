@@ -67,7 +67,7 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
             return (value)? color(value): "#444"; 
           });
 
-        states.append("div")
+        states.append("title")
           .text(function (d) {
             var index = d.id;
             var value = data.percentDemStates[index]*100;

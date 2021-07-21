@@ -197,7 +197,7 @@ def index():
         state_id_lst.append(the_id)
 
     # Add a column to the candidate_df of the corresponding state ids
-    candidate_df["state_id"] = state_id_lst
+    candidate_df.insert(8, "state_id", state_id_lst, True)
 
     # Calculate Democrat win percentage
     i = 0         # 0 means Trump, 1 means Biden
