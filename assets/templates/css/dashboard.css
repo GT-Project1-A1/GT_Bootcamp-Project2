@@ -1,0 +1,39 @@
+html,
+body {
+  height: auto;
+}
+body {
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(248, 130, 130),
+    rgb(77, 77, 241)
+  );
+}
+
+a {
+  color: whitesmoke;
+}
+.navbar-toggle .icon-bar {
+  background-color: whitesmoke;
+}
+.nav > li > a:any-link {
+  background-color: transparent;
+}
+
+.nav .open > a,
+.nav .open > a:focus,
+.nav .open > a:hover {
+  background-color: transparent;
+}
+
+.dropdown-menu {
+  background-color: purple;
+}
+
+.dropdown-menu > li > a {
+  color: whitesmoke;
+}
+
+.dropdown-menu > li > a:any-link {
+  background-color: transparent;
+}
