@@ -71,8 +71,10 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
           .text(function (d) {
             var index = d.id;
             var value = data.percentDemStates[index]*100;
+            var joeBiden = value.toFixed(1)
+            var donaldTrump = (100-value).toFixed(1)
             var state = d.properties.name;
-            return index ? state + " => Joe Biden: " + value.toFixed(1) + "%" : 'No Data';
+            return index ? state + " (Joe Biden: " + joeBiden + "%, Donald Trump: " + donaldTrump + "%)" : 'No Data';
           }); // hover over states to see what state
 
 
@@ -114,7 +116,17 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
             return value ? color(value) : '#AAA';
           })
           .append("title")
-            .text(d => d.properties.name);
+            .text(function (d) {
+              var index = d.id;
+              if (index.charAt(0) == 0 ) {
+                index = index.substring(1);
+              }
+              var value = data.percentDemCounties[index]*100;
+              var joeBiden = value.toFixed(1)
+              var donaldTrump = (100-value).toFixed(1)
+              var county = d.properties.name;
+              return index ? county + " County (Joe Biden: " + joeBiden + "%, Donald Trump: " + donaldTrump + "%)" : 'No Data';
+            });
 
 
       // Add white lines between states
