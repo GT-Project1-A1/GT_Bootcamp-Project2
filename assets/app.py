@@ -181,7 +181,7 @@ def index():
         new_county_list.append(updated_county)
 
     # Change original county names with new county list
-    candidate_df["new_county_name"] = new_county_list
+    candidate_df.insert(7, "new_county_name", new_county_list, True)
     
     
     # Append state IDs
@@ -210,9 +210,6 @@ def index():
     
     countiesCandidate_df = candidate_df.groupby(["new_county_name","state_id", "candidate" ]).sum()
     
-    
-    
-    
     for index, row in countiesCandidate_df.iterrows():
         
         if i == 0:
@@ -222,13 +219,11 @@ def index():
             count = count + row["total_votes"]
             
             # Two "counties" in the dataset (Cary Plt. and Kingsbury Plt.) have Biden and Trump at 0 votes so go 50% for each
-            try:
+            if count != 0:
                 percent = row["total_votes"] / count
-            
-            except:
+            else:
                 percent = .5
                 
-            
             county = row.name[0]
             state_id = row.name[1]              
             
@@ -241,10 +236,7 @@ def index():
             
             if county_id != None: 
                 county_info = {county_id: percent}
-                percentDemCounties.update(county_info)
-                
-
-                
+                percentDemCounties.update(county_info)     
 
             i = 0
             count = 0
