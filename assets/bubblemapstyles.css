@@ -1,0 +1,39 @@
+html,
+body {
+    height: 100%;
+  }
+body {
+    background-image: linear-gradient(to bottom right, rgb(255, 255, 255), rgb(255, 255, 255));
+  }
+.land {
+    fill: rgb(191, 196, 206);
+  }
+  
+  .border {
+    fill: none;
+    stroke: rgb(255, 255, 255);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  
+  .bubble {
+    fill: rgb(45, 72, 192);
+    fill-opacity: .5;
+    stroke: #fff;
+    stroke-width: .5px;
+  }
+  
+  .bubble :hover {
+    stroke: #000;
+  }
+  
+  .legend circle {
+    fill: none;
+    stroke: #ccc;
+  }
+  
+  .legend text {
+    fill: #777;
+    font: 10px sans-serif;
+    text-anchor: middle;
+  }
