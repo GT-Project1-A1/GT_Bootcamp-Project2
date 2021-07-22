@@ -24,8 +24,9 @@ def getData():
     #state = mongo.db.pState.find()
     #county = mongo.db.pCounty.find()
     county_IDs = mongo.db.countyIds.find()
+    countyIdsStates = mongo.db.countyIdsStates.find()
 
-    all_data = [candidate, county_IDs]
+    all_data = [candidate, county_IDs, countyIdsStates]
 
     return all_data
 
@@ -260,7 +261,53 @@ def index():
     finalJson.update({"percentDemStates": percentDemStates})
     finalJson.update({"percentDemCounties": percentDemCounties})
 
+    # Data for Bubble Map - candidate and countyid data - convert to json then dataframe
+    IdsStates_data = return_list[2]
+    IdsStates_json = json.loads(IdsStates_data)
+    IdsStates_df = pd.DataFrame.from_records(IdsStates_json)
+    cond_cand_df = df[["state", "county", "candidate", "total_votes"]]
+    IdsStates_df1 = IdsStates_df[['id','county','state']]
+
+    # Create two separate data sets containing Biden and Trump vote counts at the county level
+    B_candidate_df = cond_cand_df.loc[(cond_cand_df["candidate"] == "Joe Biden"),:]
+    T_candidate_df = cond_cand_df.loc[(cond_cand_df["candidate"] == "Donald Trump"),:]
+
+    #Remove the word county from candidate data frames - help with merge
+    B_candidate_df['county'] = B_candidate_df['county'].str.replace(' County', '')
+    T_candidate_df['county'] = T_candidate_df['county'].str.replace(' County', '')
+
+    #dictionary and map function to convert state full names to abbrev - help with merge
+    us_state_abbrev = {
+    'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA', 'Colorado': 'CO',
+    'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
+    'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA',
+    'Maine': 'ME', 'Maryland': 'MD', 'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
+    'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
+    'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
+    'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC', 'South Dakota': 'SD',
+    'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA',
+    'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY', 'District of Columbia': 'DC'}
+    B_candidate_df['state'] = B_candidate_df['state'].map(us_state_abbrev)
+    T_candidate_df['state'] = T_candidate_df['state'].map(us_state_abbrev)
+
+    #Merge candidate and countyid data on state and county - will be used to map total votes to topojsondata
+    Bmerge_df = pd.merge(IdsStates_df1, B_candidate_df, on=["county","state"])
+    Tmerge_df = pd.merge(IdsStates_df1, T_candidate_df, on=["county","state"])
+
+    # condense to desired format and convert to dictionary key-value pairs
+    Bbubbledf = Bmerge_df[["id", "total_votes"]]
+    Tbubbledf = Tmerge_df[["id", "total_votes"]]
+    B_area_dict = dict(zip(Bbubbledf.id, Bbubbledf.total_votes))
+    T_area_dict = dict(zip(Tbubbledf.id, Tbubbledf.total_votes))
+    B_area_dict
+    finalJson1 = {}
+    # update finaljson
+    finalJson.update({"Bcountyvotecount": B_area_dict})
+    finalJson.update({"Tcountyvotecount": T_area_dict})
+
     return finalJson
+
+    
 
 
 @app.route("/getAllRecords/<tableNumber>")
