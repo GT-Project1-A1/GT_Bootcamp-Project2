@@ -21,11 +21,11 @@ mongo = PyMongo(app)
 def getData():
     # Pull data from Mongo
     candidate = mongo.db.pCandidate.find()
-    state = mongo.db.pState.find()
-    county = mongo.db.pCounty.find()
+    #state = mongo.db.pState.find()
+    #county = mongo.db.pCounty.find()
     county_IDs = mongo.db.countyIds.find()
 
-    all_data = [candidate, state, county, county_IDs]
+    all_data = [candidate, county_IDs]
 
     return all_data
 
@@ -37,56 +37,58 @@ def index():
 
     # Create dictionary to for topojson state ids
     state_ids = {"Alabama": "01",
-                 "Alaska": "02",
-                 "Arizona": "04",
-                 "Arkansas": "05",
-                 "California": "06",
-                 "Colorado": "08",
-                 "Connecticut": "09",
-                 "Delaware": "10",
-                 "District of Columbia": "11",
-                 "Florida": "12",
-                 "Georgia": "13",
-                 "Hawaii": "15",
-                 "Idaho": "16",
-                 "Illinois": "17",
-                 "Indiana": "18",
-                 "Iowa": "19",
-                 "Kansas": "20",
-                 "Kentucky": "21",
-                 "Louisiana": "22",
-                 "Maine": "23",
-                 "Maryland": "24",
-                 "Massachusetts": "25",
-                 "Michigan": "26",
-                 "Minnesota": "27",
-                 "Mississippi": "28",
-                 "Missouri": "29",
-                 "Montana": "30",
-                 "Nebraska": "31",
-                 "Nevada": "32",
-                 "New Hampshire": "33",
-                 "New Jersey": "34",
-                 "New Mexico": "35",
-                 "New York": "36",
-                 "North Carolina": "37",
-                 "North Dakota": "38",
-                 "Ohio": "39",
-                 "Oklahoma": "40",
-                 "Oregon": "41",
-                 "Pennsylvania": "42",
-                 "Rhode Island": "44",
-                 "South Carolina": "45",
-                 "South Dakota": "46",
-                 "Tennessee": "47",
-                 "Texas": "48",
-                 "Utah": "49",
-                 "Vermont": "50",
-                 "Virginia": "51",
-                 "Washington": "53",
-                 "West Virginia": "54",
-                 "Wisconsin": "55",
-                 "Wyoming": "56"}
+                "Alaska": "02",
+                "Arizona": "04",
+                "Arkansas": "05",
+                "California": "06",
+                "Colorado": "08",
+                "Connecticut": "09",
+                "Delaware": "10",
+                "District of Columbia": "11",
+                "Florida": "12",
+                "Georgia": "13",
+                "Hawaii": "15",
+                "Idaho": "16",
+                "Illinois": "17",
+                "Indiana": "18",
+                "Iowa": "19",
+                "Kansas": "20",
+                "Kentucky": "21",
+                "Louisiana": "22",
+                "Maine": "23",
+                "Maryland": "24",
+                "Massachusetts": "25",
+                "Michigan": "26",
+                "Minnesota": "27",
+                "Mississippi": "28",
+                "Missouri": "29",
+                "Montana": "30",
+                "Nebraska": "31",
+                "Nevada": "32",
+                "New Hampshire": "33",
+                "New Jersey": "34",
+                "New Mexico": "35",
+                "New York": "36",
+                "North Carolina": "37",
+                "North Dakota": "38",
+                "Ohio": "39",
+                "Oklahoma": "40",
+                "Oregon": "41",
+                "Pennsylvania": "42",
+                "Rhode Island": "44",
+                "South Carolina": "45",
+                "South Dakota": "46",
+                "Tennessee": "47",
+                "Texas": "48",
+                "Utah": "49",
+                "Vermont": "50",
+                "Virginia": "51",
+                "Washington": "53",
+                "West Virginia": "54",
+                "Wisconsin": "55",
+                "Wyoming": "56"}
+
+
 
     all_data = getData()
 
@@ -119,7 +121,7 @@ def index():
     count = 0
     finalJson = {}
     percentDemStates = {}
-    x = 1
+    x = 1 
 
     for index, row in condensed_df.iterrows():
         if i == 0:
@@ -142,22 +144,35 @@ def index():
     # County votes calculation
 
     # Pull in topojson county ID data from mongo
-    counties = pd.DataFrame(columns=['Name', 'ID'])
-    countyIds_data = return_list[3]
+    #counties = pd.DataFrame(columns = ['Name', 'ID'])
+
+    counties = {}
+    countyIds_data = return_list[1]
     countyIds_json = json.loads(countyIds_data)
 
     # Create dictionary with county name keys and id values
-    for element in countyIds_json:
+    thestate_id = 0
+    county_dict = {}
+    for element in countyIds_json:    
+        
         ids = element.get("id")
-        names = element.get("name")
 
-        if names == "De Kalb":
-            names = "DeKalb"
 
-        counties = counties.append(
-            {'Name': names, 'ID': ids}, ignore_index=True)
+        try: 
+            if ids % 1000 == 0:
+                counties[thestate_id] = county_dict
 
+                county_dict = {}
+                thestate_id = str(ids)
+            
+            else:       
+                names = element.get("name")
+                county_dict[names] = ids
+        except:
+            print(ids)
+        
     # Clean data
+
     # Delete "County" from any county names
     county_name_list = candidate_df["county"].tolist()
 
@@ -166,7 +181,7 @@ def index():
 
         county_end = county.find(' County')
         parish_end = county.find(' Parish')
-        ctytwnship_end = county.find(' Cty Townships')
+        ctytwnship_end = county.find( ' Cty Townships')
 
         if county_end > 0:
             updated_county = county[0:county_end]
@@ -181,8 +196,7 @@ def index():
 
     # Change original county names with new county list
     candidate_df.insert(7, "new_county_name", new_county_list, True)
-    
-    
+
     # Append state IDs
     # Define blank state id list
     state_id_lst = []
@@ -197,21 +211,20 @@ def index():
         state_id_lst.append(the_id)
 
     # Add a column to the candidate_df of the corresponding state ids
-    candidate_df.insert(8, "state_id", state_id_lst, True)
+    candidate_df.insert(7, "state_id", state_id_lst, True) 
 
     # Calculate Democrat win percentage
     i = 0         # 0 means Trump, 1 means Biden
-    count = 0
+
     percentDemCounties = {}
     x = 1 
+    count = 0
 
-    
     countiesCandidate_df = candidate_df.groupby(["new_county_name","state_id", "candidate" ]).sum()
-    
-    for index, row in countiesCandidate_df.iterrows():
 
+    for index, row in countiesCandidate_df.iterrows():
         if i == 0:
-            count = count + row["total_votes"]
+            count = row["total_votes"]
             i = i + 1
         else:
             count = count + row["total_votes"]
@@ -223,20 +236,23 @@ def index():
                 percent = .5
                 
             county = row.name[0]
-            state_id = row.name[1]
-
+            state_id = row.name[1]    
+                
             try:
-                county_id_df = counties.loc[(counties["Name"] == county) & (
-                    counties["ID"] > state_id) & (counties["ID"] < state_id + 1000), :]
-                county_id = county_id_df['ID'].values[0]
-
+                #county_id_df = counties.loc[(counties["Name"] == county) & (counties["ID"] > state_id),:] 
+                #county_id = county_id_df['ID'].values[0]
+                
+                temp_dict = counties.get(str(state_id))
+                #print(temp_dict)
+                county_id = temp_dict.get(county)
+                
             except:
                 county_id = None
-
-            if county_id != None:
+        
+            if county_id != None: 
                 county_info = {county_id: percent}
-                percentDemCounties.update(county_info)     
-
+                percentDemCounties.update(county_info)
+            
             i = 0
             count = 0
             x = x + 1

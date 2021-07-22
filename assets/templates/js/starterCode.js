@@ -41,7 +41,7 @@ d3.json("http://127.0.0.1:5000/").then(function(data) {
 
     // Define color scale (republican red -> flip state purple -> democrat blue)
     var color = d3.scaleLinear()
-    .domain([0, .5, 1])
+    .domain([.47, .5, .53])
     .range(["red", "purple", "blue"])
 
     addMap()
