@@ -21,12 +21,12 @@ mongo = PyMongo(app)
 def getData():
     # Pull data from Mongo
     candidate = mongo.db.pCandidate.find()
-    #state = mongo.db.pState.find()
-    #county = mongo.db.pCounty.find()
+    state = mongo.db.pState.find()
+    county = mongo.db.pCounty.find()
     county_IDs = mongo.db.countyIds.find()
     countyIdsStates = mongo.db.countyIdsStates.find()
 
-    all_data = [candidate, county_IDs, countyIdsStates]
+    all_data = [candidate, state, county, county_IDs, countyIdsStates]
 
     return all_data
 
@@ -148,7 +148,7 @@ def index():
     #counties = pd.DataFrame(columns = ['Name', 'ID'])
 
     counties = {}
-    countyIds_data = return_list[1]
+    countyIds_data = return_list[3]
     countyIds_json = json.loads(countyIds_data)
 
     # Create dictionary with county name keys and id values
@@ -262,7 +262,7 @@ def index():
     finalJson.update({"percentDemCounties": percentDemCounties})
 
     # Data for Bubble Map - candidate and countyid data - convert to json then dataframe
-    IdsStates_data = return_list[2]
+    IdsStates_data = return_list[4]
     IdsStates_json = json.loads(IdsStates_data)
     IdsStates_df = pd.DataFrame.from_records(IdsStates_json)
     cond_cand_df = df[["state", "county", "candidate", "total_votes"]]
