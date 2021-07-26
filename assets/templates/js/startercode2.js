@@ -79,7 +79,13 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
       .attr("d", path);
 
     svg.append("g")
-      .attr("class", "bubble")
+      .attr("class", function (f) {
+        if (z==1) { 
+          return "bubble"
+        }else if(z==2){
+          return "bubble2"
+        }
+      })
       .selectAll("circle")
       .data(topojson.feature(us, us.objects.counties).features)
     .enter().append("circle")
@@ -94,9 +100,26 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
      if (z==1) {
           return radius(Bvalue)
       }else if(z==2){
-          return radius(Tvalue)
-          
-      }
+          return radius(Tvalue)};
+      })
+     // .append("title")
+      //.text(function(d) {
+        //var index = d.id;
+        //if (index.charAt(0) == 0 ) {
+          //index = index.substring(1);
+        //}
+        //var county = d.properties.name;
+        //return index ? county + "\nPopulation " + formatNumber(data.properties.population);
+      //});
+      
+      
+      
+      
+        
+    
+
+      
+      
       //var dropdown = d3.select("#ddlViewBy")
       //var change = function() {
         //var source = dropdown.node().options[dropdown.node().selectedIndex].value;
@@ -113,7 +136,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
       
       //return radius(Bvalue);
     
-    });
+    
        
 });
 });

@@ -1,71 +1,51 @@
 html,
 body {
-  height: 100%;
-}
+    height: 100%;
+  }
 body {
-  background-image: linear-gradient(
-    to bottom right,
-    rgb(248, 130, 130),
-    rgb(92, 92, 247)
-  );
-}
+    background-image: linear-gradient(to bottom right, rgb(248, 130, 130),
+    rgb(92, 92, 247));
+  }
 .land {
-  fill: rgb(191, 196, 206);
-}
+    fill: rgb(191, 196, 206);
+  }
+  
+  .border {
+    fill: none;
+    stroke: rgb(255, 255, 255);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  
+  .bubble {
+    fill: rgb(45, 72, 192);
+    fill-opacity: .5;
+    stroke: #fff;
+    stroke-width: .5px;
+  }
 
-.border {
-  fill: none;
-  stroke: rgb(255, 255, 255);
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
+  .bubble2 {
+    fill: rgb(173, 0, 29);
+    fill-opacity: .5;
+    stroke: #fff;
+    stroke-width: .5px;
+  }
+  
+  .bubble :hover {
+    stroke: #000;
+  }
 
-.bubble {
-  fill: rgb(45, 72, 192);
-  fill-opacity: 0.5;
-  stroke: #fff;
-  stroke-width: 0.5px;
-}
-
-.bubble :hover {
-  stroke: #000;
-}
-
-.legend circle {
-  fill: none;
-  stroke: #ccc;
-}
-
-.legend text {
-  fill: rgb(20, 2, 2);
-  font: 10px sans-serif;
-  text-anchor: middle;
-}
-
-a {
-  color: whitesmoke;
-}
-.navbar-toggle .icon-bar {
-  background-color: whitesmoke;
-}
-.nav > li > a:any-link {
-  background-color: transparent;
-}
-
-.nav .open > a,
-.nav .open > a:focus,
-.nav .open > a:hover {
-  background-color: transparent;
-}
-
-.dropdown-menu {
-  background-color: purple;
-}
-
-.dropdown-menu > li > a {
-  color: whitesmoke;
-}
-
-.dropdown-menu > li > a:any-link {
-  background-color: transparent;
-}
+  .bubble2 :hover {
+    stroke: #000;
+  }
+  
+  .legend circle {
+    fill: none;
+    stroke: #ccc;
+  }
+  
+  .legend text {
+    fill: rgb(20, 2, 2);
+    font: 10px sans-serif;
+    text-anchor: middle;
+  }
