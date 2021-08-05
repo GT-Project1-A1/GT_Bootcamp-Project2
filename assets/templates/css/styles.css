@@ -53,3 +53,34 @@ svg {
 rect.bg {
   fill: transparent !important;
 }
+
+
+.social-link {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:black;
+  border-radius: 50%;
+  transition: all 0.3s;
+  font-size: 1.5rem;
+}
+
+.social-link:hover,
+.social-link:focus {
+  background: #ddd;
+  text-decoration: none;
+  color: black}
+
+
+.name {
+  color: black;
+  font-size: 35px;
+}
+
+.paragraph {
+  color: black;
+  font-size: medium;
+}
